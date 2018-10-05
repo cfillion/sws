@@ -215,7 +215,7 @@ static void applyGrooveToMidiTake(RprMidiTake &midiTake, double beatDivider, dou
         if(selectedOnly && !note->isSelected())
             continue;
         double noteBeat = TimeToBeat(note->getPosition());
-        GrooveItem grooveItem;
+        GrooveItem grooveItem{};
         if(!GetGrooveBeatPosition(noteBeat, BeatsInMeasure(BeatToMeasure(noteBeat)) / beatDivider, positionStrength, &grooveBeats, grooveItem))
             continue;
 
@@ -584,7 +584,7 @@ bool GrooveTemplateHandler::LoadGroove(std::string &fileName, std::string &error
             return false;
         }
     }
-    catch (std::ifstream::failure e)
+    catch (const std::ifstream::failure &)
     {
                 errorMessage = __LOCALIZE("Error reading file","sws_mbox");
         return false;

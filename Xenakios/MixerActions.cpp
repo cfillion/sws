@@ -534,7 +534,7 @@ void DoRenameTracksDlg(COMMAND_T* ct)
 		for (i=0;i<(int)VecSelTracks.size();i++)
 		{
 			//
-			char argh[10];
+			char argh[12];
 			sprintf(argh,"-%.2d",i+1);
 			AutogenName.assign(g_NewTrackName);
 			AutogenName.append(argh);
@@ -993,7 +993,6 @@ int IsRefTrack(COMMAND_T*) { return g_ReferenceTrackSolo; }
 void DoToggleReferenceTrack(COMMAND_T*)
 {
 	int isolo;
-	int ifxen;
 	bool bmute;
 	MediaTrack* reftk=0;
 	if (!g_ReferenceTrackSolo)
@@ -1009,10 +1008,8 @@ void DoToggleReferenceTrack(COMMAND_T*)
 			GetSetMediaTrackInfo(reftk,"B_MUTE",&bmute);
 			GetSetMediaTrackInfo(reftk,"I_SOLO",&isolo);
 			MediaTrack* mtk=CSurf_TrackFromID(0,false);
-			ifxen=0;
 			if (mtk)
 			{
-				//GetSetMediaTrackInfo(mtk,"I_FXEN",&ifxen);
 				g_RefMasterVolume=*(double*)GetSetMediaTrackInfo(mtk,"D_VOL",0);
 				double mvol=1.0;
 				GetSetMediaTrackInfo(mtk,"D_VOL",&mvol);
@@ -1033,10 +1030,8 @@ void DoToggleReferenceTrack(COMMAND_T*)
 			GetSetMediaTrackInfo(reftk,"B_MUTE",&bmute);
 			GetSetMediaTrackInfo(reftk,"I_SOLO",&isolo);
 			MediaTrack* mtk=CSurf_TrackFromID(0,false);
-			ifxen=1;
 			if (mtk)
 			{
-				//GetSetMediaTrackInfo(mtk,"I_FXEN",&ifxen);	
 				GetSetMediaTrackInfo(mtk,"D_VOL",&g_RefMasterVolume);
 			}
 		} 

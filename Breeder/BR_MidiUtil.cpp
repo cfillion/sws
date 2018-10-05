@@ -1634,7 +1634,7 @@ int MapVelLaneToReaScriptCC (int lane)
 	if (lane == CC_VELOCITY)        return 0x200;
 	if (lane == CC_VELOCITY_OFF)    return 0x207;
 	if (lane >= 0   && lane <= 127) return lane;
-	if (lane >= 128 && lane <= 133)	return 0x200 | (lane+1 & 0x7F);
+	if (lane >= 128 && lane <= 133)	return 0x200 | ((lane+1) & 0x7F);
 	if (lane >= 134 && lane <= 165) return 0x100 | (lane - 134);
 	else                            return -1;
 }

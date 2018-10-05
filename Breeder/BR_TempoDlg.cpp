@@ -68,7 +68,7 @@ static void ConvertMarkersToTempo (int markers, int num, int den, bool removeMar
 			MessageBox(g_hwndParent, __LOCALIZE("Not enough project markers in the time selection to perform conversion.", "sws_DLG_166"), __LOCALIZE("SWS/BR - Error", "sws_mbox"), MB_OK);
 		else
 			MessageBox(g_hwndParent, __LOCALIZE("Not enough project markers in the project to perform conversion.", "sws_DLG_166"), __LOCALIZE("SWS/BR - Error", "sws_mbox"), MB_OK);
-			return;
+		return;
 	}
 
 	if (CountTempoTimeSigMarkers(NULL) > 0)
@@ -333,7 +333,7 @@ static void LoadOptionsConversion (int& markers, int& num, int& den, int& remove
 	timeSel         = (lp.getnumtokens() > 4) ? lp.gettoken_int(4) : 0;
 	gradual         = (lp.getnumtokens() > 5) ? lp.gettoken_int(5) : 0;
 	split           = (lp.getnumtokens() > 6) ? lp.gettoken_int(6) : 0;
-	strncpy(splitRatio, (lp.getnumtokens() > 7) ? lp.gettoken_str(7) : "1/2", splitRatioSz);
+	_snprintfSafe(splitRatio, "%s", lp.getnumtokens() > 7 ? lp.gettoken_str(7) : "1/2");
 
 	double convertedRatio;
 	IsFraction(splitRatio, convertedRatio);
@@ -1203,7 +1203,7 @@ WDL_DLGRET SelectAdjustTempoProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 			_snprintfSafe(eNum,      sizeof(eNum),      "%d", num);
 			_snprintfSafe(eDen,      sizeof(eDen),      "%d", den);
 
-			double effBpmCursor = effBpmCursor = TempoAtPosition(GetCursorPositionEx(NULL));
+			double effBpmCursor = TempoAtPosition(GetCursorPositionEx(NULL));
 			char bpmCursor[128];
 			_snprintfSafe(bpmCursor, sizeof(bpmCursor), "%.6g", effBpmCursor);
 

@@ -284,8 +284,8 @@ void CmdPitchUpMidi::doCommand(int flag)
         return;
 
     for(int i = 0; i < ctr->size(); i++) {
-    if (!ctr->getAt(i).getActiveTake().isMIDI())
-        continue;
+        if (!ctr->getAt(i).getActiveTake().isMIDI())
+            continue;
         RprMidiTake midiItem(ctr->getAt(i).getActiveTake());
         for(int j = 0; j < midiItem.countNotes(); j++) {
             RprMidiNote *note = midiItem.getNoteAt(j);
@@ -326,8 +326,8 @@ void CmdSetItemNameMidi::doCommand(int flag)
                 "E", "F", "F#", "G", "G#", "A", "A#", "B"};
             int nameIndex = pitch % 12;
 
-            char octave[8];
-            _snprintf(octave, 8, "%d", pitch / 12 - 1);
+            char octave[11];
+            _snprintf(octave, sizeof(octave), "%d", pitch / 12 - 1);
 
             char noteName[8];
             strcpy(noteName, noteNames[nameIndex]);
@@ -364,8 +364,8 @@ void CmdVelChangeMidi::doCommand(int flag)
         return;
 
     for(int i = 0; i < ctr->size(); i++) {
-    if (!ctr->getAt(i).getActiveTake().isMIDI())
-        continue;
+        if (!ctr->getAt(i).getActiveTake().isMIDI())
+            continue;
         RprMidiTake midiItem(ctr->getAt(i).getActiveTake());
         for(int j = 0; j < midiItem.countNotes(); j++) {
             RprMidiNote *note = midiItem.getNoteAt(j);

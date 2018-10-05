@@ -240,8 +240,8 @@ WDL_DLGRET AWFillGapsProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 					if(wParam == IDOK)
 					{
-						char prms[128];
-						_snprintf(prms, 128, "%s,%s,%s,%s,%s,%s,%d,%d",
+						char prms[793];
+						_snprintf(prms, sizeof(prms), "%s,%s,%s,%s,%s,%s,%d,%d",
 							triggerPad, fadeLength, maxGap, !stretch ? "1.0" : maxStretch, (!stretch || !trans) ? "0" : presTrans,
 							transFade, fadeShape, markErrors);
 						AWFillGapsAdv(__LOCALIZE("Fill gaps between selected items","sws_DLG_156"), prms);
@@ -435,7 +435,7 @@ void AWFillGapsAdv(const char* title, char* retVals)
 							double splitPoint = item1TransPos + presTrans - transFade;
 
 							// Check for default item fades
-							int fadeStateStore = fadeStateStore = *(int*)(GetConfigVar("splitautoxfade"));
+							int fadeStateStore = *(int*)(GetConfigVar("splitautoxfade"));
 							*(int*)(GetConfigVar("splitautoxfade")) = 12;
 
 							// Split item1 at the split point
@@ -535,7 +535,7 @@ void AWFillGapsAdv(const char* title, char* retVals)
 						// If gap is big and mark errors is enabled, add a marker
 						if (markErrors == 1)
 						{
-							AddProjectMarker(NULL, false, item1End, NULL, __LOCALIZE("Possible Artifact","sws_DLG_156"), NULL);
+							AddProjectMarker(NULL, false, item1End, 0, __LOCALIZE("Possible Artifact","sws_DLG_156"), 0);
 						}
 
 					}
