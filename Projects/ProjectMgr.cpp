@@ -44,7 +44,8 @@ void SaveProjectList(COMMAND_T*)
 {
 	int i = 0;
 	bool bValid = false;
-	char filename[256] = { 0, };
+	// path + \r\n + null terminator
+	char filename[256 + 2 + 1]{};
 	while (EnumProjects(i++, filename, 256))
 		if (filename[0])
 			bValid = true;
@@ -66,7 +67,7 @@ void SaveProjectList(COMMAND_T*)
 			{
 				if (filename[0])
 				{
-					strncat(filename, "\r\n", 256);
+					strcat(filename, "\r\n");
 					fwrite(filename, strlen(filename), 1, f);
 				}
 			}
