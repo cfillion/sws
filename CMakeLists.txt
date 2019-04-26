@@ -25,7 +25,17 @@ if(CMAKE_SIZEOF_VOID_P EQUAL "8")
 elseif(CMAKE_SIZEOF_VOID_P EQUAL "4")
   set(ARCH_SUFFIX "32")
 else()
-  message(FATAL_ERROR "Unknown architecture with sizeof(void*) == ${CMAKE_SIZEOF_VOID_P}")
+  message(FATAL_ERROR "Unknown architecture where sizeof(void*) == ${CMAKE_SIZEOF_VOID_P}")
+endif()
+
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/reaper_plugin_functions.h")
+  message(FATAL_ERROR
+    "reaper_plugin_functions.h cannot be found in "
+    "${CMAKE_CURRENT_SOURCE_DIR}/vendor.\n"
+
+    "Generate it using the following REAPER action: "
+    "[developer] Write C++ API functions header."
+  )
 endif()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
