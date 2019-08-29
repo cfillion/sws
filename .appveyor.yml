@@ -13,7 +13,7 @@ build_script:
   - mkdir build && cd build
   - sh:  cmake .. -DCMAKE_BUILD_TYPE=Release
   - cmd: cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -G Ninja
-  - cmake --build .
+  - cmake --build . --target all langpack
 for:
   - matrix: { only: [ image: *linux ] }
     install:
@@ -26,6 +26,7 @@ for:
     artifacts:
       - path: build/reaper_sws*.so
       - path: build/sws_python.py
+      - path: build/BuildUtils/SWS_Template.ReaperLangPack
 
   - matrix: { only: [ image: *windows ] }
     install:
@@ -37,3 +38,4 @@ for:
       - path: build\reaper_sws*.dll
       - path: build\reaper_sws*.pdb
       - path: build\sws_python.py
+      - path: build\BuildUtils\SWS_Template.ReaperLangPack

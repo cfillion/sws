@@ -38,15 +38,7 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/reaper_plugin_functions.h")
   )
 endif()
 
-find_program(PERL perl)
-if(NOT PERL)
-  message(FATAL_ERROR "Perl is not installed or cannot be found.")
-endif()
-
-find_program(PHP php)
-if(NOT PHP)
-  message(FATAL_ERROR "PHP is not installed or cannot be found.")
-endif()
+set(REASCRIPT_PYTHON_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sws_python.py)
 
 set(CMAKE_CXX_VISIBILITY_PRESET "hidden")
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
@@ -92,6 +84,16 @@ elseif(MSVC)
   )
 endif()
 
+find_program(PERL perl)
+if(NOT PERL)
+  message(FATAL_ERROR "Perl is not installed or cannot be found.")
+endif()
+
+find_program(PHP php)
+if(NOT PHP)
+  message(FATAL_ERROR "PHP is not installed or cannot be found.")
+endif()
+
 add_custom_command(
   OUTPUT  reascript_vararg.h
   COMMAND ${PHP} reascript_vararg.php > ${CMAKE_CURRENT_BINARY_DIR}/reascript_vararg.h
@@ -100,39 +102,42 @@ add_custom_command(
 )
 
 add_custom_command(
-  OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/sws_python.py
+  OUTPUT  ${REASCRIPT_PYTHON_OUTPUT}
   COMMAND ${PERL} reascript_python.pl ${REASCRIPT_PYTHON_FLAGS} >
-    ${CMAKE_CURRENT_BINARY_DIR}/sws_python.py
+    ${REASCRIPT_PYTHON_OUTPUT}
   DEPENDS ReaScript.cpp reascript_python.pl reascript_helper.pl
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+add_custom_target(reascript-python ALL DEPENDS ${REASCRIPT_PYTHON_OUTPUT})
+
 add_library(sws SHARED
+  libebur128/ebur128.cpp
   Menus.cpp
   Prompt.cpp
   reaper/reaper.cpp
   ReaScript.cpp
+  reascript_vararg.h # dynamically generated
   sws_about.cpp
   sws_extension.cpp
   sws_extension.rc
   sws_util.cpp
   sws_waitdlg.cpp
   sws_wnd.cpp
-  Zoom.cpp
   Utility/Base64.cpp
-  libebur128/ebur128.cpp
+  Zoom.cpp
+)
 
-  # Platform-specific code
-  $<$<BOOL:${UNIX}>:sws_util$<IF:$<BOOL:${APPLE}>,.mm,_generic.cpp>>
-  $<$<BOOL:${WIN32}>:
+if(WIN32)
+  target_sources(sws PRIVATE
     Utility/win32-utf8.cpp
     DragDrop.cpp
-  >
-
-  # Generated files
-  reascript_vararg.h
-  ${CMAKE_CURRENT_BINARY_DIR}/sws_python.py
-)
+  )
+else()
+  target_sources(sws PRIVATE
+    sws_util$<IF:$<BOOL:${APPLE}>,.mm,_generic.cpp>
+  )
+endif()
 
 target_compile_features(sws PRIVATE cxx_std_11)
 
@@ -276,6 +281,8 @@ add_subdirectory(TrackList)
 add_subdirectory(Wol)
 add_subdirectory(Xenakios)
 
+add_subdirectory(BuildUtils)
+
 set(SWS_VERSION_REGEX "^#define SWS_VERSION ([0-9]+),([0-9]+),([0-9]+),([0-9]+)$")
 file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/version.h" SWS_VERSION_DEF REGEX
   "${SWS_VERSION_REGEX}")
@@ -289,7 +296,8 @@ endforeach()
 get_target_property(CPACK_PACKAGE_NAME sws OUTPUT_NAME)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/setup/license.txt")
 set(CPACK_PACKAGE_VERSION
-  "${sws_VERSION_MAJOR}.${sws_VERSION_MINOR}.${sws_VERSION_PATCH}.${sws_VERSION_TWEAK}")
+  "${sws_VERSION_MAJOR}.${sws_VERSION_MINOR}.${sws_VERSION_PATCH}.${sws_VERSION_TWEAK}"
+)
 set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-v${CPACK_PACKAGE_VERSION}")
 
 if(APPLE)
