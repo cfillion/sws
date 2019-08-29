@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.15)
 project(sws LANGUAGES C CXX)
 
 option(USE_TAGLIB    "Link with TagLib to add tagging support"     ON)
@@ -48,13 +48,13 @@ if(NOT PHP)
   message(FATAL_ERROR "PHP is not installed or cannot be found.")
 endif()
 
+set(CMAKE_CXX_VISIBILITY_PRESET "hidden")
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE        ON)
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELWITHDEBINFO ON)
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_MINSIZEREL     ON)
-
-set(CMAKE_CXX_VISIBILITY_PRESET "hidden")
 
 if(UNIX)
   add_compile_options(
@@ -69,9 +69,6 @@ elseif(MSVC)
     CMAKE_C_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_RELWITHDEBINFO
     CMAKE_C_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_MINSIZEREL
   )
-    # Use the static CRT runtime library
-    string(REPLACE "/MD" "/MT" ${arg} "${${arg}}")
-
     # Embed debug information in the object files
     string(REPLACE "/Zi" "/Z7" ${arg} "${${arg}}")
   endforeach()
