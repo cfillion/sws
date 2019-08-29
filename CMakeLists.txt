@@ -38,7 +38,7 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/reaper_plugin_functions.h")
   )
 endif()
 
-set(REASCRIPT_PYTHON_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sws_python.py)
+set(REASCRIPT_PYTHON_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sws_python${ARCH_SUFFIX}.py)
 
 set(CMAKE_CXX_VISIBILITY_PRESET "hidden")
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
@@ -248,7 +248,7 @@ install(TARGETS sws
   LIBRARY DESTINATION "${REAPER_USER_PLUGINS}" # macOS .dylib/Linux .so
 )
 
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/sws_python.py"
+install(FILES sws_python.py "${REASCRIPT_PYTHON_OUTPUT}"
   COMPONENT   "Python ReaScript API wrapper"
   DESTINATION "${REAPER_SCRIPTS}"
 )

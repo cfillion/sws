@@ -1,4 +1,5 @@
--- Generates a .DS_Store to customize the .dmg looks
+-- This script is used to generate a .DS_Store customizing how the .dmg looks
+
 on run argv
   set image_name to item 1 of argv
 
@@ -22,15 +23,16 @@ on run argv
           set toolbar   visible to false
           set the bounds        to { 150, 150, 714, 689 }
 
-          set targetFile to "reaper_sws64.dylib"
-          if not exists item targetFile
-            set targetFile to "reaper_sws32.dylib"
+          set arch to "64"
+          if not exists item "reaper_sws64.dylib"
+            set arch to "32"
           end if
 
-          set position of item targetFile      to { 124, 85 }
-          set position of item "UserPlugins"   to { 421, 85 }
-          set position of item "sws_python.py" to { 234, 311 }
-          set position of item "Grooves"       to { 234, 450 }
+          set position of item ("reaper_sws" & arch & ".dylib") to { 124, 85  }
+          set position of item "UserPlugins"                    to { 421, 85  }
+          set position of item "sws_python.py"                  to { 164, 311 }
+          set position of item ("sws_python" & arch & ".py")    to { 294, 311 }
+          set position of item "Grooves"                        to { 234, 450 }
         end tell
 
         update without registering applications
