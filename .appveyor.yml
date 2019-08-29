@@ -1,7 +1,7 @@
 ---
 version: "{build}-{branch}"
 image:
-  - &windows Visual Studio 2017
+  - &windows Visual Studio 2019
   - &linux   Ubuntu1804
 platform:
   - x64
@@ -31,8 +31,8 @@ for:
     install:
       - choco install -y php
       - refreshenv
-      - if "%PLATFORM%" == "x64" call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
-      - if "%PLATFORM%" == "x86" call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
+      - if "%PLATFORM%" == "x64" call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
+      - if "%PLATFORM%" == "x86" call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars32.bat"
     artifacts:
       - path: build\reaper_sws*.dll
       - path: build\reaper_sws*.pdb
