@@ -22,7 +22,6 @@ add_library(wdl
   ${WDL_DIR}/wingui/virtwnd-iconbutton.cpp
   ${WDL_DIR}/wingui/virtwnd-slider.cpp
   ${WDL_DIR}/wingui/virtwnd.cpp
-  ${WDL_DIR}/wingui/virtwnd.h
   ${WDL_DIR}/wingui/wndsize.cpp
 
   $<$<BOOL:${WIN32}>:${WDL_DIR}/win32_utf8.c>
