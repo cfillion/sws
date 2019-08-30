@@ -129,14 +129,9 @@ add_library(sws SHARED
 )
 
 if(WIN32)
-  target_sources(sws PRIVATE
-    Utility/win32-utf8.cpp
-    DragDrop.cpp
-  )
+  target_sources(sws PRIVATE Utility/win32-utf8.cpp DragDrop.cpp)
 else()
-  target_sources(sws PRIVATE
-    sws_util$<IF:$<BOOL:${APPLE}>,.mm,_generic.cpp>
-  )
+  target_sources(sws PRIVATE sws_util$<IF:$<BOOL:${APPLE}>,.mm,_generic.cpp>)
 endif()
 
 target_compile_features(sws PRIVATE cxx_std_11)
@@ -208,10 +203,7 @@ if(MSVC)
   target_compile_options(sws PRIVATE /Yu${PCH_INPUT} /Fp${PCH_OUTPUT})
 
   # ...except for these files
-  set_source_files_properties(
-    reaper/reaper.cpp
-    PROPERTIES COMPILE_OPTIONS "/Y-"
-  )
+  set_source_files_properties(reaper/reaper.cpp PROPERTIES COMPILE_OPTIONS "/Y-")
 
   # Build the precompiled header
   set_source_files_properties(stdafx.cpp PROPERTIES
@@ -235,7 +227,7 @@ set_target_properties(sws PROPERTIES
 set(REAPER_USER_PLUGINS "UserPlugins")
 set(REAPER_SCRIPTS      "Scripts")
 
-if(INSTALL_NO_SUFFIX)
+if(NO_INSTALL_PREFIX)
   # Used for .dmg generation to avoid getting directories
   # Maybe there's a better way?
   set(REAPER_USER_PLUGINS ".")
