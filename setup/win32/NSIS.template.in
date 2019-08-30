@@ -25,6 +25,7 @@ Section "Extension DLL" extension_id
   MessageBox MB_OKCANCEL "Please close all instances of REAPER before continuing installation." IDOK CheckReaper IDCANCEL Abort
   ReaperClosed:
 
+  ; remove legacy files
   Delete "$INSTDIR\Plugins\reaper_console.dll"
   Delete "$INSTDIR\Plugins\reaper_freeze.dll"
   Delete "$INSTDIR\Plugins\reaper_markeractions.dll"
@@ -38,6 +39,7 @@ Section "Extension DLL" extension_id
   Delete "$INSTDIR\Plugins\reaper_WT_InTheSky.dll"
   Delete "$INSTDIR\Plugins\reaper_sws_whatsnew.txt"
   Delete "$INSTDIR\Plugins\reaper_sws.dll"
+  Delete "$INSTDIR\Plugins\reaper_sws64.dll"
 
   SetOutPath $INSTDIR\Plugins
   File /r ${COMPONENT_DIR}\sws\UserPlugins\*.*
