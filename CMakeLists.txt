@@ -86,27 +86,21 @@ elseif(MSVC)
   )
 endif()
 
-find_program(PERL perl)
-if(NOT PERL)
-  message(FATAL_ERROR "Perl is not installed or cannot be found.")
-endif()
-
-find_program(PHP php)
-if(NOT PHP)
-  message(FATAL_ERROR "PHP is not installed or cannot be found.")
-endif()
+find_package(Perl REQUIRED)
+find_package(PHP REQUIRED)
 
 add_custom_command(
   OUTPUT  reascript_vararg.h
-  COMMAND ${PHP} reascript_vararg.php > ${CMAKE_CURRENT_BINARY_DIR}/reascript_vararg.h
+  COMMAND ${PHP_EXECUTABLE} reascript_vararg.php
+    > ${CMAKE_CURRENT_BINARY_DIR}/reascript_vararg.h
   DEPENDS ReaScript.cpp reascript_vararg.php
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 add_custom_command(
   OUTPUT  ${REASCRIPT_PYTHON_OUTPUT}
-  COMMAND ${PERL} reascript_python.pl ${REASCRIPT_PYTHON_FLAGS} >
-    ${REASCRIPT_PYTHON_OUTPUT}
+  COMMAND ${PERL_EXECUTABLE} reascript_python.pl ${REASCRIPT_PYTHON_FLAGS}
+    > ${REASCRIPT_PYTHON_OUTPUT}
   DEPENDS ReaScript.cpp reascript_python.pl reascript_helper.pl
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
