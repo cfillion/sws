@@ -28,8 +28,8 @@
 #include "stdafx.h"
 #include "cfillion.hpp"
 
-#include "../reaper/localize.h"
-#include "../version.h"
+#include "reaper/localize.h"
+#include "version.h"
 
 #ifdef _WIN32
 static const unsigned int FORMAT = CF_UNICODETEXT;

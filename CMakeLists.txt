@@ -279,16 +279,17 @@ add_subdirectory(TrackList)
 add_subdirectory(Wol)
 add_subdirectory(Xenakios)
 
+# the langpack target must be included after all sources files are registered
 add_subdirectory(BuildUtils)
 
 set(SWS_VERSION_REGEX "^#define SWS_VERSION ([0-9]+),([0-9]+),([0-9]+),([0-9]+)$")
-file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/version.h" SWS_VERSION_DEF REGEX
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/version.h.in" SWS_VERSION_DEF REGEX
   "${SWS_VERSION_REGEX}")
 foreach(pair "1;MAJOR" "2;MINOR" "3;PATCH" "4;TWEAK")
   list(GET pair 0 capture)
   list(GET pair 1 segment)
   string(REGEX REPLACE "${SWS_VERSION_REGEX}" "\\${capture}"
-    sws_VERSION_${segment} "${SWS_VERSION_DEF}")
+    SWS_VERSION_${segment} "${SWS_VERSION_DEF}")
 endforeach()
 
 find_package(Git)
@@ -304,8 +305,7 @@ endif()
 
 set(CPACK_PACKAGE_NAME "sws")
 set(CPACK_PACKAGE_VERSION
-  "${sws_VERSION_MAJOR}.${sws_VERSION_MINOR}.${sws_VERSION_PATCH}.${sws_VERSION_TWEAK}"
-)
+  "${SWS_VERSION_MAJOR}.${SWS_VERSION_MINOR}.${SWS_VERSION_PATCH}.${SWS_VERSION_TWEAK}")
 set(CPACK_PACKAGE_FILE_NAME
   "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_NAME}-${ARCH_NAME}-${GIT_COMMIT}")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/setup/license.txt")
@@ -332,3 +332,5 @@ set(CPACK_NSIS_PACKAGE_NAME "SWS Extension v${CPACK_PACKAGE_VERSION}")
 set(CPACK_NSIS_CPUBITS ${CPUBITS})
 
 include(CPack)
+
+configure_file(version.h.in version.h)
