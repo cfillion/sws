@@ -60,7 +60,7 @@ SectionEnd
 Function .onInit
   SetRegView ${CPUBITS}
   ReadRegStr $0 HKLM Software\Reaper ""
-  StrCmp $0 "" +1
+  StrCmp $0 "" +2
   StrCpy $INSTDIR $0
   SectionSetFlags ${extension_id} 17 ; Read only and selected
 FunctionEnd
