@@ -1,11 +1,11 @@
 !define CPUBITS "@CPACK_NSIS_CPUBITS@"
-!define INST_DIR "@CPACK_TEMPORARY_DIRECTORY@"
+!define COMPONENT_DIR "@CPACK_TEMPORARY_DIRECTORY@"
 
 Unicode true
 Name "@CPACK_NSIS_PACKAGE_NAME@"
 OutFile "@CPACK_TOPLEVEL_DIRECTORY@\@CPACK_OUTPUT_FILE_NAME@"
 SetCompressor @CPACK_NSIS_COMPRESSOR@
-InstallDir "$PROGRAMFILES${CPUBITS}\REAPER"
+InstallDir "$PROGRAMFILES${CPUBITS}\REAPER\"
 RequestExecutionLevel highest
 LicenseData "@CPACK_RESOURCE_FILE_LICENSE@"
 
@@ -40,17 +40,17 @@ Section "Extension DLL" extension_id
   Delete "$INSTDIR\Plugins\reaper_sws.dll"
 
   SetOutPath $INSTDIR\Plugins
-  File /r ${INST_DIR}\sws\UserPlugins\*.*
+  File /r ${COMPONENT_DIR}\sws\UserPlugins\*.*
 
   SetOutPath $INSTDIR
-  File /r ${INST_DIR}\sws_python\*.*
+  File /r ${COMPONENT_DIR}\sws_python\*.*
 
   Abort:
 SectionEnd
 
 Section "Grooves" groove_id
   SetOutPath $GROOVE_DIR
-  File /r ${INST_DIR}\grooves\*.*
+  File /r ${COMPONENT_DIR}\grooves\*.*
 
   ; Since we don't allow the user to select the groove dir anymore,
   ; don't set the path in the INI.  The code sets the default instead.
