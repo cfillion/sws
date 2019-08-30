@@ -25,6 +25,7 @@ for:
           export CFLAGS=-m32 CXXFLAGS=-m32;
         fi
     artifacts:
+      - path: build/reaper_sws*.tar.xz
       - path: build/reaper_sws*.so
       - path: build/sws_python*.py
       - path: build/BuildUtils/SWS_Template.ReaperLangPack
