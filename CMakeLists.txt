@@ -5,6 +5,7 @@ option(USE_TAGLIB    "Link with TagLib to add tagging support"     ON)
 option(SYSTEM_TAGLIB "Try to use the system-provided TagLib first" ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/setup/win32") # NSIS
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   if(WIN32)
@@ -41,6 +42,7 @@ endif()
 set(REASCRIPT_PYTHON_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sws_python${ARCH_SUFFIX}.py)
 
 set(CMAKE_CXX_VISIBILITY_PRESET "hidden")
+set(CMAKE_INSTALL_DEFAULT_COMPONENT_NAME sws) # don't create an empty "Unspecified"
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
@@ -109,7 +111,7 @@ add_custom_command(
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-add_custom_target(reascript-python ALL DEPENDS ${REASCRIPT_PYTHON_OUTPUT})
+add_custom_target(sws_python ALL DEPENDS ${REASCRIPT_PYTHON_OUTPUT})
 
 add_library(sws SHARED
   libebur128/ebur128.cpp
@@ -235,19 +237,19 @@ if(NO_INSTALL_PREFIX)
 endif()
 
 install(TARGETS sws
-  COMPONENT "SWS extension"
+  COMPONENT sws
   RUNTIME DESTINATION "${REAPER_USER_PLUGINS}" # Windows .dll
   LIBRARY DESTINATION "${REAPER_USER_PLUGINS}" # macOS .dylib/Linux .so
 )
 
 install(FILES sws_python.py "${REASCRIPT_PYTHON_OUTPUT}"
-  COMPONENT   "Python ReaScript API wrapper"
+  COMPONENT   sws_python
   DESTINATION "${REAPER_SCRIPTS}"
 )
 
 install(DIRECTORY "FingersExtras/Grooves"
-  COMPONENT   "Groove templates"
-  DESTINATION "."
+  COMPONENT   grooves
+  DESTINATION .
   EXCLUDE_FROM_ALL
 )
 
@@ -289,19 +291,19 @@ find_package(Git)
 if(GIT_FOUND)
   execute_process(
     COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
-    OUTPUT_VARIABLE GIT_COMMIT_HASH
+    OUTPUT_VARIABLE GIT_COMMIT
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 else()
-  set(GIT_COMMIT_HASH "nogit")
+  set(GIT_COMMIT "nogit")
 endif()
 
 get_target_property(CPACK_PACKAGE_NAME sws OUTPUT_NAME)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/setup/license.txt")
 set(CPACK_PACKAGE_VERSION
-  "${sws_VERSION_MAJOR}.${sws_VERSION_MINOR}.${sws_VERSION_PATCH}.${sws_VERSION_TWEAK}"
+  "${sws_VERSION_MAJOR}.${sws_VERSION_MINOR}.${sws_VERSION_PATCH}.${sws_VERSION_TWEAK}-${GIT_COMMIT}"
 )
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-v${CPACK_PACKAGE_VERSION}-${GIT_COMMIT_HASH}")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-v${CPACK_PACKAGE_VERSION}")
 
 if(APPLE)
   set(CPACK_GENERATOR DragNDrop)
@@ -313,5 +315,8 @@ set(CPACK_DMG_DS_STORE_SETUP_SCRIPT
 set(CPACK_DMG_BACKGROUND_IMAGE
   "${CMAKE_CURRENT_SOURCE_DIR}/setup/macos/background.tiff")
 set(CPACK_DMG_DISABLE_APPLICATIONS_SYMLINK ON)
+
+set(CPACK_NSIS_PACKAGE_NAME "SWS Extension v${CPACK_PACKAGE_VERSION}")
+set(CPACK_NSIS_CPUBITS ${ARCH_SUFFIX})
 
 include(CPack)

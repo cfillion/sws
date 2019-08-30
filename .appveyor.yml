@@ -14,6 +14,7 @@ build_script:
   - sh:  cmake .. -DCMAKE_BUILD_TYPE=Release
   - cmd: cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -G Ninja
   - cmake --build . --target all langpack
+  - cpack
 for:
   - matrix: { only: [ image: *linux ] }
     install:
@@ -25,17 +26,21 @@ for:
         fi
     artifacts:
       - path: build/reaper_sws*.so
-      - path: build/sws_python.py
+      - path: build/sws_python*.py
       - path: build/BuildUtils/SWS_Template.ReaperLangPack
 
   - matrix: { only: [ image: *windows ] }
     install:
-      - choco install -y php
+      - choco install -y nsis php
       - refreshenv
-      - if "%PLATFORM%" == "x64" call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
-      - if "%PLATFORM%" == "x86" call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars32.bat"
+      - curl -fsSLO https://nsis.sourceforge.io/mediawiki/images/3/3c/FindProc.zip
+      - 7z e FindProc.zip -o"%ProgramFiles(x86)%\NSIS\Plugins\x86-unicode" FindProcDLL.dll
+
+      - if "%PLATFORM%" == "x64" call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
+      - if "%PLATFORM%" == "x86" call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars32.bat"
     artifacts:
+      - path: build\reaper_sws*.exe
       - path: build\reaper_sws*.dll
       - path: build\reaper_sws*.pdb
-      - path: build\sws_python.py
+      - path: build\sws_python*.py
       - path: build\BuildUtils\SWS_Template.ReaperLangPack
