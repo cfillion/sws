@@ -37,6 +37,7 @@ Section "Extension DLL" extension_id
   Delete "$INSTDIR\Plugins\reaper_dragzoom.dll"
   Delete "$INSTDIR\Plugins\reaper_WT_InTheSky.dll"
   Delete "$INSTDIR\Plugins\reaper_sws_whatsnew.txt"
+  Delete "$INSTDIR\Plugins\reaper_sws.dll"
 
   SetOutPath $INSTDIR\Plugins
   File /r ${INST_DIR}\sws\UserPlugins\*.*
