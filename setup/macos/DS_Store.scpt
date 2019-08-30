@@ -23,16 +23,19 @@ on run argv
           set toolbar   visible to false
           set the bounds        to { 150, 150, 714, 689 }
 
-          set arch to "64"
-          if not exists item "reaper_sws64.dylib"
-            set arch to "32"
+          set reaper_sws to "reaper_sws-x86_64.dylib"
+          set sws_python to "sws_python64.py"
+
+          if not exists item reaper_sws
+            set reaper_sws to "reaper_sws-i386.dylib"
+            set sws_python to "sws_python32.py"
           end if
 
-          set position of item ("reaper_sws" & arch & ".dylib") to { 124, 85  }
-          set position of item "UserPlugins"                    to { 421, 85  }
-          set position of item "sws_python.py"                  to { 164, 311 }
-          set position of item ("sws_python" & arch & ".py")    to { 294, 311 }
-          set position of item "Grooves"                        to { 234, 450 }
+          set position of item reaper_sws      to { 124, 85  }
+          set position of item "UserPlugins"   to { 421, 85  }
+          set position of item "sws_python.py" to { 164, 311 }
+          set position of item sws_python      to { 294, 311 }
+          set position of item "Grooves"       to { 234, 450 }
         end tell
 
         update without registering applications

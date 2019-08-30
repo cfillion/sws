@@ -25,7 +25,7 @@ for:
           export CFLAGS=-m32 CXXFLAGS=-m32;
         fi
     artifacts:
-      - path: build/reaper_sws*.tar.xz
+      - path: build/sws*.tar.xz
       - path: build/reaper_sws*.so
       - path: build/sws_python*.py
       - path: build/BuildUtils/SWS_Template.ReaperLangPack
@@ -40,7 +40,7 @@ for:
       - if "%PLATFORM%" == "x64" call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
       - if "%PLATFORM%" == "x86" call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars32.bat"
     artifacts:
-      - path: build\reaper_sws*.exe
+      - path: build\sws*.exe
       - path: build\reaper_sws*.dll
       - path: build\reaper_sws*.pdb
       - path: build\sws_python*.py
