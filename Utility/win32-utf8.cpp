@@ -26,7 +26,7 @@
 ******************************************************************************/
 
 #include "stdafx.h"
-#include "../SnM/SnM.h"
+#include "SnM/SnM.h"
 
 #ifndef _WIN32
 #  error This file should not be built on non-Windows systems.

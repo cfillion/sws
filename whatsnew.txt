@@ -1,4 +1,4 @@
-+Reworked Windows installer
++Reworked the Windows installer
  - Allow installing SWS to paths containing characters outside of the system's ANSI codepage
  - Migrate the extension DLL to <resource path>\UserPlugins, reaper_sws.py to <resource path>\Scripts
  - Make installing the Python ReaScript support optional
