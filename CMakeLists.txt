@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.13)
 project(sws LANGUAGES C CXX)
 
 option(USE_TAGLIB    "Link with TagLib to add tagging support"     ON)
@@ -53,7 +53,6 @@ set(REASCRIPT_PYTHON_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sws_python${CPUBITS}.py)
 
 set(CMAKE_CXX_VISIBILITY_PRESET "hidden")
 set(CMAKE_INSTALL_DEFAULT_COMPONENT_NAME sws) # don't create an empty "Unspecified"
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE        ON)
@@ -73,6 +72,9 @@ elseif(MSVC)
     CMAKE_C_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_RELWITHDEBINFO
     CMAKE_C_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_MINSIZEREL
   )
+    # Use the static CRT runtime library
+    string(REPLACE "/MD" "/MT" ${arg} "${${arg}}")
+
     # Embed debug information in the object files
     string(REPLACE "/Zi" "/Z7" ${arg} "${${arg}}")
   endforeach()
