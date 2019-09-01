@@ -21,7 +21,7 @@ on run argv
           set sidebar   width   to 0
           set statusbar visible to false
           set toolbar   visible to false
-          set the bounds        to { 150, 150, 714, 689 }
+          set the bounds        to { 150, 150, 714, 714 }
 
           set reaper_sws to "reaper_sws-x86_64.dylib"
           set sws_python to "sws_python64.py"
