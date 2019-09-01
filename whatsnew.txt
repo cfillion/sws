@@ -1,3 +1,6 @@
++Enable media file tagging features on Linux
++Update TagLib on macOS to v1.11.1
++Split the macOS release into 32-bit and 64-bit versions, delete reaper_sws_extension.dylib
 +Reworked the Windows installer
  - Allow installing SWS to paths containing characters outside of the system's ANSI codepage
  - Migrate the extension DLL to <resource path>\UserPlugins, reaper_sws.py to <resource path>\Scripts
