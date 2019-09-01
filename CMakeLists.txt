@@ -76,7 +76,7 @@ elseif(MSVC)
     string(REPLACE "/MD" "/MT" ${arg} "${${arg}}")
 
     # Embed debug information in the object files
-    string(REPLACE "/Zi" "/Z7" ${arg} "${${arg}}")
+    string(REGEX REPLACE "/Z[iI]" "/Z7" ${arg} "${${arg}}")
   endforeach()
 
   # Global compiler flags (all targets)
