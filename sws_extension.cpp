@@ -988,8 +988,6 @@ error:
 		IMPAPI(RemoveXPStyle);
 #endif
 		IMPAPI(RenderFileSection);
-		IMPAPI(Resample_EnumModes);
-		IMPAPI(Resampler_Create);
 		IMPAPI(RemoveTrackSend); // v5.15pre1+
 		IMPAPI(ReverseNamedCommandLookup);
 		IMPAPI(ScaleFromEnvelopeMode); // v5pre13+

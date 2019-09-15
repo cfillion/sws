@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.13)
 project(sws LANGUAGES C CXX)
 
-option(BUILD_SWS_PYTHON "Generate sws_python(32|64).py (requires Perl)" ON)
-option(SYSTEM_TAGLIB    "Try to use the system-provided TagLib first"   ON)
-option(USE_TAGLIB       "Link with TagLib to enable tagging features"   ON)
+option(BUILD_SWS_PYTHON  "Generate sws_python(32|64).py (requires Perl)"   ON)
+option(SYSTEM_LIBEBUR128 "Try to use the system-provided LibEbur128 first" OFF)
+option(SYSTEM_TAGLIB     "Try to use the system-provided TagLib first"     ON)
+option(USE_TAGLIB        "Link with TagLib to enable tagging features"     ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -127,7 +128,6 @@ if(BUILD_SWS_PYTHON)
 endif()
 
 add_library(sws SHARED
-  libebur128/ebur128.cpp
   Menus.cpp
   Prompt.cpp
   reaper/reaper.cpp
@@ -157,10 +157,11 @@ target_include_directories(sws PRIVATE
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-find_package(WDL REQUIRED)
-find_package(LICE REQUIRED)
 find_package(JNetLib REQUIRED)
-target_link_libraries(sws JNetLib::JNetLib LICE::LICE WDL::WDL)
+find_package(LibEbur128 REQUIRED)
+find_package(LICE REQUIRED)
+find_package(WDL REQUIRED)
+target_link_libraries(sws JNetLib::JNetLib EBUR128::EBUR128 LICE::LICE WDL::WDL)
 
 find_package(SWELL)
 if(SWELL_FOUND)

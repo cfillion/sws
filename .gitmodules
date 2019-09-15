@@ -4,3 +4,6 @@
 [submodule "vendor/taglib"]
 	path = vendor/taglib
 	url = https://github.com/taglib/taglib
+[submodule "vendor/libebur128"]
+	path = vendor/libebur128
+	url = https://github.com/jiixyj/libebur128

@@ -42,7 +42,7 @@ endif()
 
 # Detect TagLib's version
 if(EXISTS "${TagLib_INCLUDE_DIR}/taglib.h")
-  file(STRINGS "${TagLib_INCLUDE_DIR}/taglib.h" TagLib_H REGEX "${TagLib_VERSION_REGEX}")
+  file(STRINGS "${TagLib_INCLUDE_DIR}/taglib.h" TagLib_H)
 
   foreach(segment MAJOR MINOR PATCH)
     set(regex "#define TAGLIB_${segment}_VERSION ([0-9]+)")
@@ -60,7 +60,7 @@ find_package_handle_standard_args(TagLib
   VERSION_VAR   TagLib_VERSION
 )
 
-if(TagLib_FOUND AND NOT TARGET TagLib::TagLib)
+if(TagLib_FOUND)
   if(TagLib_SOURCE_DIR)
     add_library(TagLib::TagLib ALIAS tag)
   else()

@@ -26,13 +26,13 @@
 /
 ******************************************************************************/
 #include "stdafx.h"
+#include <ebur128.h>
 #include "BR_Loudness.h"
 #include "BR_EnvelopeUtil.h"
 #include "BR_Util.h"
 #include "../SnM/SnM_Dlg.h"
 #include "../SnM/SnM_Util.h"
 #include "../SnM/SnM.h"
-#include "../libebur128/ebur128.h"
 #include "../reaper/localize.h"
 
 /******************************************************************************
@@ -1205,7 +1205,9 @@ unsigned WINAPI BR_LoudnessObject::AnalyzeData (void* loudnessObject)
 				for (int i = 0; i < data.channels; ++i)
 				{
 					double channelTruePeak, channelTruePeakPos;
-					ebur128_true_peak(loudnessState, i, &channelTruePeak, &channelTruePeakPos);
+					ebur128_true_peak(loudnessState, i, &channelTruePeak);
+					//ebur128_true_peak_time(loudnessState, i, &channelTruePeakPos);
+					channelTruePeakPos = 0; // FIXME
 					if (channelTruePeak > truePeak)
 					{
 						truePeak   = channelTruePeak;
