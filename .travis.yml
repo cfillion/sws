@@ -17,6 +17,13 @@ script:
       -DNO_INSTALL_PREFIX=YES
   - cmake --build .
   - cpack
+
+  - |-
+    if [ "$TRAVIS_BRANCH" == "artifact-upload" ] && [ -n ${DEPLOY_KEY+x} ]; then
+      echo "$DEPLOY_KEY" | base64 -D > deploy_key && chmod 600 deploy_key &&
+      scp -i deploy_key -o StrictHostKeyChecking=NO -q \
+        sws*.dmg cfillion@ssh-cfillion.alwaysdata.net:sws
+    fi
 addons:
   homebrew:
     packages:

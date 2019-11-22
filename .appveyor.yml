@@ -34,6 +34,12 @@ for:
       - cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN
       - cmake --build .
       - cpack
+    deploy_script: |-
+      if [ "$APPVEYOR_REPO_BRANCH" == "artifact-upload" ] && [ -v DEPLOY_KEY ]; then
+        echo "$DEPLOY_KEY" | base64 -d > deploy_key && chmod 600 deploy_key &&
+        scp -i deploy_key -o StrictHostKeyChecking=NO -q \
+          sws*.tar.xz cfillion@ssh-cfillion.alwaysdata.net:sws
+      fi
     artifacts:
       - path: build/sws*.tar.xz
 
@@ -50,6 +56,15 @@ for:
       - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - cmake --build . --target all langpack whatsnew
       - cpack
+    deploy_script:
+      - ps: |-
+          if($env:APPVEYOR_REPO_BRANCH -eq "artifact-upload" -And $env:DEPLOY_KEY -ne $null) {
+            $bytes = [System.Convert]::FromBase64String($env:DEPLOY_KEY)
+            [System.IO.File]::WriteAllBytes("$($PWD)\deploy_key", $bytes)
+            scp -i deploy_key -o StrictHostKeyChecking=NO -q `
+              BuildUtils/SWS_Template.ReaperLangPack BuildUtils/whatsnew.html `
+              sws*.exe version.h cfillion@ssh-cfillion.alwaysdata.net:sws
+          }
     artifacts:
       - path: build\sws*.exe
       - path: build\reaper_sws*.pdb
@@ -64,6 +79,9 @@ environment:
     - { APPVEYOR_BUILD_WORKER_IMAGE: *linux,   ARCH: i686    }
     - { APPVEYOR_BUILD_WORKER_IMAGE: *linux,   ARCH: armv7l  }
     - { APPVEYOR_BUILD_WORKER_IMAGE: *linux,   ARCH: aarch64 }
+  global:
+    DEPLOY_KEY:
+      secure: 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
 
 notifications:
   - provider: GitHubPullRequest
