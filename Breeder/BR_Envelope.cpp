@@ -1580,27 +1580,37 @@ void FitEnvPointsToTimeSel (COMMAND_T* ct)
 
 void CreateEnvPointMouse (COMMAND_T* ct)
 {
+	ShowConsoleMsg("Hello CreateEnvPointMouse\n");
 	BR_Envelope envelope(GetSelectedEnvelope(NULL));
 	double position = PositionAtMouseCursor(false);
 
 	// For take envelopes check cursor position here in case it gets snapped later
 	if (envelope.IsTakeEnvelope())
 	{
+		ShowConsoleMsg("it's a take envelope\n");
 		double start = GetMediaItemInfo_Value(GetMediaItemTake_Item(envelope.GetTake()), "D_POSITION");
 		double end   = start +  GetMediaItemInfo_Value(GetMediaItemTake_Item(envelope.GetTake()), "D_LENGTH");
 		if (!CheckBounds(position, start, end))
 			return;
+		ShowConsoleMsg("bounds were checked\n");
 	}
+
+	char str[255];
+	snprintf(str, sizeof(str), "\ttesting position and visibility: %f and %d\n", position, envelope.VisibleInArrange(NULL, NULL));
+	ShowConsoleMsg(str);
 
 	if (position != -1 && envelope.VisibleInArrange(NULL, NULL))
 	{
 		position = SnapToGrid(NULL, position);
 		double fudgeFactor = (envelope.IsTempo()) ? (MIN_TEMPO_DIST) : (MIN_ENV_DIST);
+		snprintf(str, sizeof(str), "\tvalidating ID: %d and %d\n", envelope.Find(position, fudgeFactor), envelope.ValidateId(envelope.Find(position, fudgeFactor)));
+		ShowConsoleMsg(str);
 		if (!envelope.ValidateId(envelope.Find(position, fudgeFactor)))
 		{
 			double value = envelope.ValueAtPosition(position);
 			if (envelope.IsTempo())
 			{
+				ShowConsoleMsg("\tIsTempo\n");
 				bool insertedStretchMarkers = InsertStretchMarkerInAllItems(position);
 				if (SetTempoTimeSigMarker(NULL, -1, position, -1, -1, value, 0, 0, !envelope.GetDefaultShape()) || insertedStretchMarkers)
 				{
@@ -1610,12 +1620,14 @@ void CreateEnvPointMouse (COMMAND_T* ct)
 			}
 			else
 			{
+				ShowConsoleMsg("\tNot Tempo\n");
 				envelope.CreatePoint(envelope.CountPoints(), position, value, envelope.GetDefaultShape(), 0, false, true);
 				if (envelope.Commit())
 					Undo_OnStateChangeEx2(NULL, SWS_CMD_SHORTNAME(ct), UNDO_STATE_TRACKCFG | UNDO_STATE_ITEMS, -1);
 			}
 		}
 	}
+	ShowConsoleMsg("ByeBye CreateEnvPointMouse\n\n");
 }
 
 void IncreaseDecreaseVolEnvPoints (COMMAND_T* ct)
