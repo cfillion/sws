@@ -1,3 +1,5 @@
++Increase the maximum number of dynamic actions from 255 to 500 (request https://forum.cockos.com/showthread.php?p=2250272|here|)
+
 !v2.11.0 pre-release build
 <strong>Reminder: this new SWS version requires REAPER v5.979+!</strong>
 

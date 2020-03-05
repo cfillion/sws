@@ -153,7 +153,7 @@
 #define SNM_MAX_ACTION_CUSTID_LEN  128
 #define SNM_MAX_MACRO_CUSTID_LEN   32
 #define SNM_MAX_ACTION_NAME_LEN    512 // can be localized
-#define SNM_MAX_DYN_ACTIONS        0xFF     // if > 255, DYN_COMMAND_T must be updated
+#define SNM_MAX_DYN_ACTIONS        500 // if > USHORT_MAX (but <= INT_MAX), DYN_COMMAND_T must be updated
 #define SNM_MAX_ENV_CHUNKNAME_LEN  32
 #define SNM_MAX_MARKER_NAME_LEN    64     // + regions
 #define SNM_MAX_TRACK_NAME_LEN     128
@@ -214,13 +214,12 @@ public:
 	int m_int;
 };
 
-// unsigned chars are enough ATM..
 typedef struct DYN_COMMAND_T {
 	const char* desc;
 	const char* id;
 	void (*doCommand)(COMMAND_T*);
-	unsigned char count;
-	unsigned char max;
+	unsigned short count; // must be big enough to hold SNM_MAX_DYN_ACTIONS
+	unsigned short max;   // same
 	int (*getEnabled)(COMMAND_T*);
 	int uniqueSectionId;
 	void(*onAction)(COMMAND_T*, int, int, int, HWND);
