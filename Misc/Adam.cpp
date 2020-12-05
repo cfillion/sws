@@ -2607,13 +2607,20 @@ void AWClrTimeSelClkOff(COMMAND_T* = NULL)          { *ConfigVar<int>("itemclick
 
 void AWClrTimeSelClkToggle(COMMAND_T* = NULL)
 {
-	// If "click to clear" and "move cursor on time change" are both ON or both OFF, just toggle
-	if ((*ConfigVar<int>("itemclickmovecurs") & 64 && *ConfigVar<int>("itemclickmovecurs") & 4) || (!(*ConfigVar<int>("itemclickmovecurs") & 64) && !(*ConfigVar<int>("itemclickmovecurs") & 4)))
-		*ConfigVar<int>("itemclickmovecurs") ^= 68;
+	enum {
+		ClickToClear = 64, MoveCursorOnTimeChange = 4,
+		Both = ClickToClear | MoveCursorOnTimeChange,
+	};
 
+	ConfigVar<int> itemclickmovecurs{"itemclickmovecurs"};
+	const int values = *itemclickmovecurs & Both;
+
+	// If "click to clear" and "move cursor on time change" are both ON or both OFF, just toggle
+	if (values == Both || values == 0)
+		*itemclickmovecurs ^= Both;
 	// If one of them is different than the other, turn them both ON
 	else
-		*ConfigVar<int>("itemclickmovecurs") |= 68;
+		*itemclickmovecurs |= Both;
 }
 
 int IsClrTimeSelClkOn(COMMAND_T* = NULL)        { return (*ConfigVar<int>("itemclickmovecurs") & 68)  != 0; }
