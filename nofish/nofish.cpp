@@ -438,6 +438,41 @@ static void PlayStopPlayPause(COMMAND_T* ct = nullptr)
 }
 
 
+void TestWndControlIDs(COMMAND_T* ct = nullptr)
+{
+	const size_t c { 1<<14 };
+	std::stringstream ss;
+
+	HWND ME = MIDIEditor_GetActive();
+
+	auto start = std::chrono::system_clock::now();
+	for(size_t i = 0; i < c; ++i)
+		GetNotesView(ME);
+	auto end = std::chrono::system_clock::now();
+	auto elapsed_old = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+	start = std::chrono::system_clock::now();
+	for(size_t i = 0; i < c; ++i)
+		GetNotesView_new(ME);
+	end = std::chrono::system_clock::now();
+	auto elapsed_new = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+	ss << "GetNotesView: " << (((double)elapsed_new.count() - elapsed_old.count()) / (double)elapsed_old.count()) * 100 << "%\n";
+
+	start = std::chrono::system_clock::now();
+	for(size_t i = 0; i < c; ++i)
+		GetPianoView(ME);
+	end = std::chrono::system_clock::now();
+	elapsed_old = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+	start = std::chrono::system_clock::now();
+	for(size_t i = 0; i < c; ++i)
+		GetPianoView_new(ME);
+	end = std::chrono::system_clock::now();
+	elapsed_new = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+	ss << "GetPianoView: " << (((double)elapsed_new.count() - elapsed_old.count()) / (double)elapsed_old.count()) * 100 << "%\n";
+	ShowConsoleMsg(ss.str().c_str());
+}
+
 //////////////////////////////////////////////////////////////////
 //                                                              //
 // Register commands                                            //
@@ -479,6 +514,7 @@ static COMMAND_T g_commandTable[] =
 
 	{ { DEFACCEL, "SWS/NF: Toggle Play/stop (off) or Play/pause (on)" }, "NF_TOGGLE_PLAY_STOP_PLAY_PAUSE", TogglePlayStopPlayPause, NULL, 0, IsTogglePlayStopPlayPauseEnabled},
 	{ { DEFACCEL, "SWS/NF: Play/stop or Play/pause (obey 'SWS/NF: Toggle Play/stop or Play/pause' toggle state)" }, "NF_PLAY_STOP_PLAY_PAUSE", PlayStopPlayPause, NULL, 0},
+	{ { DEFACCEL, "SWS/NF: (temp) Test Window control IDs" }, "NF_Test_Wnd_Ctrl_IDs", TestWndControlIDs, NULL },
 
 	//!WANT_LOCALIZE_1ST_STRING_END
 
