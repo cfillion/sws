@@ -3,7 +3,7 @@ version: "{build}-{branch}"
 
 before_build:
   - curl -fsSL https://gist.github.com/cfillion/da355e8278048de08ae065d6fe6031c1/raw/reaper_plugin_functions.h -o vendor/reaper_plugin_functions.h
-  - git submodule update --init
+  - git submodule update --init --depth 1
 
 for:
   - matrix: { only: [ appveyor_build_worker_image: &linux Ubuntu1804 ] }
@@ -29,6 +29,8 @@ for:
         sudo apt-get install -qq aptitude > /dev/null
         sudo aptitude install -yR ${native[@]} ${target[@]/%/:$arch} > /dev/null
       }
+
+      sudo update-alternatives --set gcc /usr/bin/gcc-7
 
       case $ARCH in
       x86_64)
