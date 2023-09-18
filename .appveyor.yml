@@ -66,6 +66,7 @@ for:
 
   - matrix: { only: [ appveyor_build_worker_image: macos, appveyor_build_worker_image: macos-bigsur ] }
     build_script:
+      - sudo xcode-select -s /Library/Developer/CommandLineTools
       - mkdir build && cd build
       - cmake .. -DCMAKE_BUILD_TYPE=Release -DNO_INSTALL_PREFIX=YES
       - cmake --build .
