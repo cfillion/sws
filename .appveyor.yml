@@ -109,8 +109,9 @@ for:
       - refreshenv
       - curl -fsSLO https://nsis.sourceforge.io/mediawiki/images/1/18/NsProcess.zip
       - 7z e nsProcess.zip -o"%ProgramFiles(x86)%\NSIS\Unicode\Plugins" nsProcessW.dll -r
-      - if "%ARCH%" == "x64" call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
-      - if "%ARCH%" == "x86" call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars32.bat"
+      - if "%ARCH%" == "x64"     call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+      - if "%ARCH%" == "x86"     call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars32.bat"
+      - if "%ARCH%" == "arm64ec" call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsamd64_arm64.bat"
     build_script:
       - mkdir build && cd build
       - cmake .. -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo
@@ -136,12 +137,15 @@ for:
 
 environment:
   matrix:
-    - job_name: Windows 64-bit
+    - job_name: Windows x86 64-bit
       appveyor_build_worker_image: *windows
       ARCH: x64
-    - job_name: Windows 32-bit
+    - job_name: Windows x86 32-bit
       appveyor_build_worker_image: *windows
       ARCH: x86
+    - job_name: Windows ARM 64-bit (Emulation Compatible)
+      appveyor_build_worker_image: *windows
+      ARCH: arm64ec
     - job_name: macOS x86 64-bit
       appveyor_build_worker_image: macos-mojave
       ARCH: x86_64
