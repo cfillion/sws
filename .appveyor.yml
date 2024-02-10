@@ -66,12 +66,12 @@ for:
       - path: build/sws*.tar.xz
       - path: build/reaper_sws*.so
 
-  - matrix: { only: [ appveyor_build_worker_image: macos-catalina, appveyor_build_worker_image: macos-mojave ] }
+  - matrix: { only: [ appveyor_build_worker_image: macos-bigsur, appveyor_build_worker_image: macos-mojave ] }
     install:
       - |-
         case $ARCH in
-        arm64) DEPLOY_TARGET=11.0 XCODE_VERSION=12.3  ;;
-        *)     DEPLOY_TARGET=10.5 XCODE_VERSION=9.4.1 ;;
+        arm64) DEPLOY_TARGET=11.0 XCODE_VERSION=13.2.1 ;;
+        *)     DEPLOY_TARGET=10.5 XCODE_VERSION=9.4.1  ;;
         esac
 
       - sudo xcode-select -s /Applications/Xcode-$XCODE_VERSION.app
@@ -153,7 +153,7 @@ environment:
     #   appveyor_build_worker_image: macos-mojave
     #   ARCH: i386
     - job_name: macOS ARM 64-bit
-      appveyor_build_worker_image: macos-catalina
+      appveyor_build_worker_image: macos-bigsur
       ARCH: arm64
     # - job_name: Linux x86 64-bit
     #   appveyor_build_worker_image: *linux
