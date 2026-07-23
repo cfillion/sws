@@ -104,7 +104,7 @@
 #define SNM_REAPER_EXE_FILE        "%s/REAPER.app"
 #endif
 #define SNM_FONT_NAME              "Lucia grande"
-#define SNM_FONT_HEIGHT            10
+#define SNM_FONT_HEIGHT            (-10)
 #define SNM_DYN_FONT_NAME          "Arial" // good default for UTF8
 #define SNM_1PIXEL_Y               (-1)
 #define SNM_GUI_TOP_H              37
